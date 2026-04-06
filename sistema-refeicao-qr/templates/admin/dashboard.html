@@ -1,0 +1,59 @@
+{% extends "admin/base_admin.html" %}
+{% block content %}
+<h1>📊 Dashboard Admin</h1>
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-number">{{ stats.alunos_total }}</div>
+    <div>Alunos Totais</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">{{ pendentes|length }}</div>
+    <div>Pendentes ({{ pendentes|length }})</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">{{ stats.refeicoes_solicitadas }}</div>
+    <div>Solicitadas Hoje</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">{{ stats.taxa_confirmacao }}%</div>
+    <div>Taxa Hoje</div>
+  </div>
+</div>
+
+<h2>⏳ Cadastros Pendentes Aprovação ({{ pendentes|length }})</h2>
+{% if pendentes %}
+<table class="pending-table">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Matrícula</th>
+      <th>Turma</th>
+      <th>Data</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for p in pendentes %}
+    <tr>
+      <td>{{ p.nome }}</td>
+      <td>{{ p.matricula }}</td>
+      <td>{{ p.turma }}</td>
+      <td>{{ p.data_cadastro }}</td>
+      <td>
+        <a href="/admin/aprovar/{{ p.id }}" class="btn btn-success btn-small">✅ Aprovar</a>
+        <a href="/admin/rejeitar/{{ p.id }}" class="btn btn-danger btn-small" onclick="return confirm('Rejeitar {{ p.nome }}?')">❌ Rejeitar</a>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p style="color: green;">✅ Nenhum pendente! Todos aprovados.</p>
+{% endif %}
+
+<div style="margin-top: 2rem;">
+  <a href="/admin/alunos" class="btn">👥 Ver Todos Alunos</a>
+  <a href="/admin/relatorios" class="btn">📈 Relatórios</a>
+  <a href="/admin-logout" class="btn btn-secondary">Sair</a>
+</div>
+{% endblock %}

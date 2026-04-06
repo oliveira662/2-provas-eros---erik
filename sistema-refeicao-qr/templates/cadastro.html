@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-container">
+    <h1>📝 Cadastro de Aluno</h1>
+    <form method="POST" action="{{ url_for('cadastro') }}">
+        <label>Nome completo:</label>
+        <input type="text" name="nome" required maxlength="100">
+        <label>Matrícula:</label>
+        <input type="text" name="matricula" required maxlength="20">
+        <label>Turma (opcional):</label>
+        <input type="text" name="turma" maxlength="20">
+        <button type="submit">Enviar para aprovação</button>
+    </form>
+    <h2>Alunos Cadastrados ({{ alunos|length }})</h2>
+    <ul>
+    {% for aluno in alunos %}
+        <li>{{ aluno[1] }} - {{ aluno[2] }} <a href="{{ url_for('login_aluno', matricula=aluno[2]) }}">Login</a></li>
+    {% endfor %}
+    </ul>
+    <a href="{{ url_for('index') }}">← Voltar Login</a>
+</div>
+{% endblock %}
+

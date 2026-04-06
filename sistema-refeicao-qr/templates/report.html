@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="report-container">
+    <h1>Relatório Diário</h1>
+    <h2>Refeições Confirmadas Hoje: {{ total_confirmadas }}</h2>
+    <h3>Lista de Refeições:</h3>
+    <ul>
+    {% for refeicao in refeicoes %}
+        <li>{{ refeicao[1] }} ({{ refeicao[2] }}) - {{ 'Confirmada' if refeicao[3] else 'Pendente' }}</li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}

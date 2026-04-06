@@ -1,0 +1,24 @@
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# SQLite DB
+*.db
+*.sqlite
+*.sqlite3
+
+# Venv
+venv*/
+env*/
+.venv
+venv_admin/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+

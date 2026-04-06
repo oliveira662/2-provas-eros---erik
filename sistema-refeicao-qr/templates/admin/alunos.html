@@ -1,0 +1,62 @@
+{% extends "admin/base_admin.html" %}
+{% block content %}
+<h1>👥 Alunos Cadastrados</h1>
+<input type="text" id="search" placeholder="Pesquisar nome ou matrícula..." onkeyup="filterTable()">
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Matrícula</th>
+      <th>Turma</th>
+      <th>Data Cadastro</th>
+      <th>Status</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody id="alunos-table">
+  {% for aluno in alunos %}
+    <tr class="{% if not aluno.aprovado %}pending{% endif %}">
+      <td>{{ aluno.id }}</td>
+      <td>{{ aluno.nome }}</td>
+      <td>{{ aluno.matricula }}</td>
+      <td>{{ aluno.turma or 'N/A' }}</td>
+      <td>{{ aluno.data_cadastro }}</td>
+      <td>
+        {% if aluno.aprovado %}
+          ✅ Aprovado
+        {% else %}
+          ⏳ Pendente
+        {% endif %}
+      </td>
+      <td>
+        {% if not aluno.aprovado %}
+          <a href="{{ url_for('admin_aprovar', aluno_id=aluno.id) }}" class="btn btn-success">Aprovar</a>
+          <a href="{{ url_for('admin_rejeitar', aluno_id=aluno.id) }}" class="btn btn-danger" onclick="return confirm('Rejeitar?')">Rejeitar</a>
+        {% else %}
+          <span class="approved">Aprovado</span>
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<script>
+function filterTable() {
+  let input = document.getElementById('search');
+  let table = document.getElementById('alunos-table');
+  let tr = table.getElementsByTagName('tr');
+  for (let i = 0; i < tr.length; i++) {
+    let td = tr[i].getElementsByTagName('td')[1];
+    if (td) {
+      if (td.innerHTML.toLowerCase().indexOf(input.value.toLowerCase()) > -1 || 
+          tr[i].getElementsByTagName('td')[2].innerHTML.toLowerCase().indexOf(input.value.toLowerCase()) > -1) {
+        tr[i].style.display = '';
+      } else {
+        tr[i].style.display = 'none';
+      }
+    }
+  }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="qr-container">
+    <h1>Seu QR Code</h1>
+    <p>Mostre este QR Code na cantina!</p>
+    <img src="data:image/png;base64,{{ qr_data }}" alt="QR Code">
+    <p>ID Refeição: {{ refeicao_id }}</p>
+    <a href="{{ url_for('cantina') }}" class="btn">Ir para Cantina (teste)</a>
+</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-container">
+    <h1>🔐 Login Aluno (apenas aprovados)</h1>
+<a href="{{ url_for('cadastro') }}" class="btn-primary">📝 Cadastro Novo Aluno</a>
+    <p><small>Após cadastro aguarde aprovação do responsável.</small></p>
+    <form method="POST" action="{{ url_for('login') }}">
+        <label>Nome:</label>
+        <input type="text" name="nome" required>
+        <label>Matrícula:</label>
+        <input type="text" name="matricula" required>
+        <button type="submit">Entrar</button>
+    </form>
+</div>
+{% endblock %}

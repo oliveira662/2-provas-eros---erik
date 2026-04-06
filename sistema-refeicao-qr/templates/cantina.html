@@ -1,0 +1,81 @@
+ z{% extends "base.html" %}
+{% block content %}
+<div class="cantina-container">
+    <h1>Cantina - Scanner QR</h1>
+    <div class="scanner-section">
+        <h2>🔥 Leitor QR Code Real - Apontar câmera!</h2>
+        <div id="scanner-container" style="width:350px;height:350px;margin:20px auto;border:3px solid #667eea;border-radius:15px;"></div>
+        <p id="qr-result" style="font-weight:bold;font-size:1.2em;text-align:center;color:green;"></p>
+        <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+        <script>
+          function initScanner() {
+            try {
+              const html5QrCode = new Html5Qrcode("scanner-container");
+              const config = { fps: 10, qrbox: {width: 250, height: 250} };
+              
+              html5QrCode.start(
+                { facingMode: "environment" }, 
+                config,
+                function(decodedText, decodedResult) {
+                  if (decodedText && decodedText.startsWith('refeicao:')) {
+                    let id = decodedText.split(':')[1];
+                    // AUTO CONFIRMA!
+                    fetch('/confirmar/' + id).then(() => {
+                      document.getElementById('qr-result').innerHTML = `✅ AUTO CONFIRMADO ID ${id}! Lista atualizada!`;
+                      location.reload(); // Refresh lista
+                    }).catch(() => {
+                      document.getElementById('qr-result').innerHTML = `Erro ao confirmar ${id}`;
+                    });
+                    html5QrCode.stop();
+                    setTimeout(initScanner, 2000);
+                  } else {
+                    document.getElementById('qr-result').textContent = '📱 Apontar QR do aluno (refeicao:ID)';
+                  }
+                },
+                function(error) {
+                  // Ignora erros de frame vazio
+                }
+              ).catch(function(err) {
+                document.getElementById('qr-result').innerHTML = '🚫 Erro câmera: <br>1. Permitir acesso câmera<br>2. Chrome/Edge<br>3. F5 recarregar';
+              });
+            } catch (err) {
+              document.getElementById('qr-result').innerHTML = '⚠️ Use Chrome/Edge + permita câmera (F5)';
+            }
+          }
+          // Inicia quando página carrega
+          window.addEventListener('load', initScanner);
+        </script>
+    </div>
+    <div class="list-section">
+        <h2>Refeições Hoje ({{ refeicoes|length }} total)</h2>
+        <p><strong>Confirmadas: {{ total_confirmadas }}</strong></p>
+        <ul>
+        {% for refeicao in refeicoes %}
+            <li>
+                {{ refeicao[1] }} ({{ refeicao[2] }})
+                {% if refeicao[3] %}
+                    ✅ Confirmada
+                {% else %}
+                    <a href="{{ url_for('confirmar', refeicao_id=refeicao[0]) }}" class="btn">Confirmar ID {{ refeicao[0] }}</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<script>
+function manualScan() {
+    let input = document.getElementById('manual-qr').value;
+    let result = document.getElementById('qr-result');
+    if (input.startsWith('refeicao:')) {
+        let id = input.split(':')[1];
+        result.innerHTML = '<a href="/confirmar/' + id + '">Confirmar Refeição ID: ' + id + '</a>';
+        result.style.color = 'green';
+    } else {
+        result.textContent = 'Formato inválido. Use: refeicao:1';
+        result.style.color = 'red';
+    }
+}
+</script>
+{% endblock %}

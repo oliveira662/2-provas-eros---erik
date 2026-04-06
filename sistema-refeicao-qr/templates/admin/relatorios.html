@@ -1,0 +1,28 @@
+{% extends "admin/base_admin.html" %}
+{% block content %}
+<h1>📈 Relatórios</h1>
+<div class="table-container">
+  <h2>Refeições por Data</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Solicitadas</th>
+        <th>Confirmadas</th>
+        <th>Taxa</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for row in relatorios %}
+      <tr>
+        <td>{{ row.data }}</td>
+        <td>{{ row.solicitadas }}</td>
+        <td>{{ row.confirmadas }}</td>
+        <td>{{ row.taxa }}%</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <a href="{{ url_for('admin.export_csv') }}" class="btn">📥 Export CSV</a>
+</div>
+{% endblock %}

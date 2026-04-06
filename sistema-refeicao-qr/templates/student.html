@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-container">
+    <h1>{{ nome }} - Solicitar Refeição</h1>
+    <p>Deseja almoçar hoje?</p>
+    <a href="{{ url_for('solicitar', aluno_id=aluno_id) }}" class="btn-primary">Quero Almoçar Hoje!</a>
+</div>
+{% endblock %}
