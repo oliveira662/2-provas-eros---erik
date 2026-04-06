@@ -1,0 +1,5 @@
+body { font-family: Arial; max-width: 600px; margin: 0 auto; padding: 20px; }
+input, button { display: block; width: 100%; margin: 10px 0; padding: 10px; }
+button { background: #4CAF50; color: white; border: none; cursor: pointer; }
+#qr-canvas { border: 1px solid #ccc; margin: 20px 0; }
+#message { color: green; font-weight: bold; }

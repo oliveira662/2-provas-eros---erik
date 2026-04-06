@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sistema Refeição QR</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Sistema de Refeição QR Code</h1>
+        <div id="login-form">
+            <h2>Login</h2>
+            <input type="text" id="matricula" placeholder="Matrícula" />
+            <button onclick="login()">Entrar</button>
+        </div>
+        <div id="cadastro-form" style="display:none;">
+            <h2>Cadastro</h2>
+            <input type="text" id="nome-cad" placeholder="Nome" />
+            <input type="text" id="matricula-cad" placeholder="Matrícula" />
+            <input type="text" id="turma-cad" placeholder="Turma" />
+            <button onclick="cadastro()">Cadastrar</button>
+        </div>
+        <div id="student-dashboard" style="display:none;">
+            <h2>Bem-vindo, <span id="nome-student"></span></h2>
+            <button onclick="solicitarQR()">Solicitar Refeição QR</button>
+        </div>
+        <div id="qr-section" style="display:none;">
+            <canvas id="qr-canvas"></canvas>
+            <p>Mostre QR na cantina</p>
+        </div>
+        <div id="message"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
