@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/static/admin.css">
+</head>
+<body>
+    <div class="dashboard">
+        <h1>Dashboard Admin</h1>
+        <div class="stats">
+            {% for key, value in stats.items() %}
+            <div>{{ key }}: {{ value }}</div>
+            {% endfor %}
+        </div>
+        <a href="/admin/alunos">Alunos</a>
+        <a href="/admin/relatorios">Relatórios</a>
+        <a href="/admin/logout">Logout</a>
+    </div>
+</body>
+</html>

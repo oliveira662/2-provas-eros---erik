@@ -1,11 +1,25 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_login import LoginManager
+from flask_login import LoginManager
 import qrcode
 from io import BytesIO
 import base64
 from db import *
+from admin import admin_bp
 
 app = Flask(__name__)
 app.secret_key = 'mvp_refeicao_qr_secret'
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'admin.login'
+
+@login_manager.user_loader
+def load_user(user_id):
+    from admin import AdminUser
+    return AdminUser(user_id)
+
+app.register_blueprint(admin_bp)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -76,51 +90,9 @@ def confirmar(refeicao_id):
     confirmar_refeicao(refeicao_id)
     return redirect(url_for('cantina'))
 
-@app.route('/admin-login', methods=['GET', 'POST'])
-def admin_login():
-    if request.method == 'POST':
-        if request.form['user'] == 'Erik XTech' and request.form['pass'] == 'Er!k_XT3ch@9#7$2Qp':
-            session['admin'] = True
-            return redirect(url_for('admin'))
-        flash('Credenciais inválidas!')
-    return render_template('admin/login.html')
 
-@app.route('/admin/aprovar/<int:aluno_id>')
-def admin_aprovar(aluno_id):
-    if not session.get('admin'):
-        return redirect(url_for('admin_login'))
-    if aprovar_aluno(aluno_id):
-        flash('Aluno aprovado!')
-    else:
-        flash('Erro ao aprovar aluno')
-    return redirect(url_for('admin'))
 
-@app.route('/admin/rejeitar/<int:aluno_id>')
-def admin_rejeitar(aluno_id):
-    if not session.get('admin'):
-        return redirect(url_for('admin_login'))
-    if rejeitar_aluno(aluno_id):
-        flash('Cadastro rejeitado!')
-    else:
-        flash('Erro ao rejeitar')
-    return redirect(url_for('admin'))
 
-@app.route('/admin')
-@app.route('/admin/alunos')
-@app.route('/admin/relatorios')
-def admin():
-    if not session.get('admin'):
-        return redirect(url_for('admin_login'))
-    stats = get_stats_admin()
-    alunos = list_alunos_full()
-    pendentes = list_pendentes_alunos()
-    refeicoes = get_refeicoes_data()
-    return render_template('admin/dashboard.html', stats=stats, alunos=alunos, pendentes=pendentes, refeicoes=refeicoes)
-
-@app.route('/admin-logout')
-def admin_logout():
-    session.pop('admin', None)
-    return redirect(url_for('index'))
 
 @app.route('/report')
 def report():
